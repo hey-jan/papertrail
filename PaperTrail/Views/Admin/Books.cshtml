@@ -1,0 +1,100 @@
+@model IEnumerable<PaperTrail.Models.Book>
+@{
+    Layout = "_AdminLayout";
+    ViewData["Title"] = "Manage Books";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold">Manage Books</h2>
+    <a asp-action="CreateBook" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add New Book</a>
+</div>
+
+<div class="card border-0 shadow-sm overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Book</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Rating</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="ps-4">
+                            <div class="d-flex align-items-center">
+                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/40x60" : item.ImageUrl)" 
+                                     class="rounded me-3" style="width: 40px; height: 60px; object-fit: cover;">
+                                <div>
+                                    <div class="fw-bold">@item.Title</div>
+                                    <small class="text-muted">@item.Author</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">
+                                @item.Category?.Name
+                            </span>
+                        </td>
+                        <td>$@item.Price</td>
+                        <td>
+                            @if (item.Stock < 10)
+                            {
+                                <span class="text-danger fw-bold"><i class="bi bi-exclamation-triangle me-1"></i> @item.Stock</span>
+                            }
+                            else
+                            {
+                                @item.Stock
+                            }
+                        </td>
+                        <td>
+                            <div class="text-warning">
+                                <i class="bi bi-star-fill"></i> @item.Rating
+                            </div>
+                        </td>
+                        <td class="text-end pe-4">
+                            <a asp-action="EditBook" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary me-2"><i class="bi bi-pencil"></i></a>
+                            <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal-@item.Id">
+                                <i class="bi bi-trash"></i>
+                            </button>
+
+                            <!-- Delete Modal -->
+                            <div class="modal fade" id="deleteModal-@item.Id" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content border-0 shadow">
+                                        <div class="modal-header border-0">
+                                            <h5 class="modal-title">Delete Book</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                        </div>
+                                        <div class="modal-body text-start">
+                                            Are you sure you want to delete <strong>@item.Title</strong>? This action cannot be undone.
+                                        </div>
+                                        <div class="modal-footer border-0">
+                                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                                            <form asp-action="DeleteBook" asp-route-id="@item.Id" method="post">
+                                                <button type="submit" class="btn btn-danger px-4">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center py-5 text-muted">
+                            No books found. Click "Add New Book" to get started.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
