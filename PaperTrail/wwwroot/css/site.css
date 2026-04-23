@@ -1,14 +1,14 @@
 :root {
-    --primary-color: #2c3e50; /* Deep blue-gray */
-    --accent-color: #d4a373; /* Warm gold/tan */
-    --accent-hover: #bc8a5f;
-    --bg-color: #fdfcfb; /* Soft cream surface */
-    --text-color: #333333;
-    --text-muted: #6c757d;
+    --primary-color: #3d2b1f; /* Rich Umber */
+    --accent-color: #c19a6b; /* Warm Tan/Fallow */
+    --accent-hover: #a67c52;
+    --bg-color: #f9f4f0; /* Soft Bone surface */
+    --text-color: #2b1d14; /* Dark Roast */
+    --text-muted: #7d6e65;
     --white: #ffffff;
-    --border-color: #e9ecef;
-    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    --card-hover-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    --border-color: #e5ddd5;
+    --card-shadow: 0 4px 12px rgba(61, 43, 31, 0.08);
+    --card-hover-shadow: 0 8px 24px rgba(61, 43, 31, 0.15);
     --transition: all 0.3s ease;
 }
 
@@ -54,7 +54,7 @@ h1, h2, h3, h4, h5, h6 {
 /* Hero Section */
 .hero {
     padding: 5rem 0;
-    background: linear-gradient(135deg, #fdfcfb 0%, #f3f4f6 100%);
+    background: linear-gradient(135deg, #f9f4f0 0%, #ede6df 100%);
     margin-bottom: 3rem;
 }
 
