@@ -1,0 +1,103 @@
+@model PaperTrail.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "User Profile";
+}
+
+<div class="container py-5">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm text-center p-4 mb-4">
+                <div class="mb-3 position-relative d-inline-block mx-auto">
+                    @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+                    {
+                        <img src="@Model.ProfilePictureUrl" id="profilePreview" class="rounded-circle border" style="width: 150px; height: 150px; object-fit: cover;">
+                    }
+                    else
+                    {
+                        <div id="profilePreviewPlaceholder" class="rounded-circle bg-light d-flex align-items-center justify-content-center border" style="width: 150px; height: 150px;">
+                            <i class="bi bi-person fs-1 text-muted"></i>
+                        </div>
+                        <img id="profilePreview" class="rounded-circle border d-none" style="width: 150px; height: 150px; object-fit: cover;">
+                    }
+                </div>
+                <h4 class="fw-bold">@Model.FullName</h4>
+                <p class="text-muted">@Model.Email</p>
+                <hr>
+                <div class="nav flex-column nav-pills text-start" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link active mb-2" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab">Personal Details</button>
+                    <button class="nav-link mb-2" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab">Order History</button>
+                    <a class="nav-link" asp-action="ChangePassword">Change Password</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel">
+                    <div class="card border-0 shadow-sm p-4">
+                        <h5 class="mb-4 fw-bold">Edit Personal Details</h5>
+                        <form asp-action="Profile" method="post" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                            
+                            <div class="mb-3">
+                                <label asp-for="FullName" class="form-label"></label>
+                                <input asp-for="FullName" class="form-control" />
+                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Email Address (Read-only)</label>
+                                <input asp-for="Email" class="form-control" readonly />
+                            </div>
+
+                            <div class="mb-4">
+                                <label asp-for="ProfilePictureFile" class="form-label">Change Profile Picture</label>
+                                <input asp-for="ProfilePictureFile" class="form-control" type="file" accept="image/*" onchange="previewImage(this)" />
+                                <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-orders" role="tabpanel">
+                    <div class="card border-0 shadow-sm p-4">
+                        <h5 class="mb-4 fw-bold">Order History</h5>
+                        <div class="text-center py-5">
+                            <i class="bi bi-bag-x fs-1 text-muted d-block mb-3"></i>
+                            <p class="text-muted">You haven't placed any orders yet.</p>
+                            <a href="/" class="btn btn-outline-primary px-4">Start Shopping</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var preview = document.getElementById('profilePreview');
+                    var placeholder = document.getElementById('profilePreviewPlaceholder');
+                    
+                    preview.src = e.target.result;
+                    preview.classList.remove('d-none');
+                    if (placeholder) placeholder.classList.add('d-none');
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
