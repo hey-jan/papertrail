@@ -72,14 +72,17 @@
                 @Model.Description
             </p>
 
-            <div class="d-flex gap-3 mb-5">
-                <button class="btn btn-primary btn-lg px-5 flex-grow-1 @(Model.Stock == 0 ? "disabled" : "")">
-                    <i class="bi bi-cart-plus me-2"></i> Add to Cart
-                </button>
-                <button class="btn btn-outline-secondary btn-lg px-4">
-                    <i class="bi bi-heart"></i>
-                </button>
-            </div>
+            <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <div class="d-flex gap-3 mb-5">
+                    <button type="submit" class="btn btn-primary btn-lg px-5 flex-grow-1 @(Model.Stock == 0 ? "disabled" : "")">
+                        <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-lg px-4">
+                        <i class="bi bi-heart"></i>
+                    </button>
+                </div>
+            </form>
 
             <hr class="my-5">
 

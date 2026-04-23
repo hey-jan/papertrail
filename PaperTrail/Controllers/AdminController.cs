@@ -24,9 +24,8 @@ namespace PaperTrail.Controllers
         {
             ViewBag.UserCount = await _context.Users.CountAsync();
             ViewBag.BookCount = await _context.Books.CountAsync();
-            // TODO: Order and Sales analytics
-            ViewBag.OrderCount = 0;
-            ViewBag.TotalSales = 0;
+            ViewBag.OrderCount = await _context.Orders.CountAsync();
+            ViewBag.TotalSales = await _context.Orders.SumAsync(o => o.TotalAmount);
 
             return View();
         }
@@ -173,6 +172,30 @@ namespace PaperTrail.Controllers
                 await _context.SaveChangesAsync();
             }
             return RedirectToAction(nameof(Categories));
+        }
+        #endregion
+
+        #region Transaction Management
+        public async Task<IActionResult> Transactions()
+        {
+            var orders = await _context.Orders
+                .Include(o => o.User)
+                .Include(o => o.OrderItems)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+            return View(orders);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrderStatus(int id, OrderStatus status)
+        {
+            var order = await _context.Orders.FindAsync(id);
+            if (order != null)
+            {
+                order.Status = status;
+                await _context.SaveChangesAsync();
+            }
+            return RedirectToAction(nameof(Transactions));
         }
         #endregion
 

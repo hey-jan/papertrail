@@ -95,7 +95,10 @@
                                 <p class="book-author">@book.Author</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <span class="book-price">$@book.Price</span>
-                                    <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-plus-lg"></i></button>
+                                    <form asp-controller="Cart" asp-action="AddToCart" method="post">
+                                        <input type="hidden" name="id" value="@book.Id" />
+                                        <button type="submit" class="btn btn-sm btn-outline-primary rounded-circle @(book.Stock == 0 ? "disabled" : "")"><i class="bi bi-plus-lg"></i></button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

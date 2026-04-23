@@ -1,0 +1,92 @@
+@model PaperTrail.Models.Order
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm p-4">
+                <h4 class="fw-bold mb-4">Shipping Information</h4>
+                <form asp-action="Checkout" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                    
+                    <div class="mb-3">
+                        <label asp-for="ShippingAddress" class="form-label">Address</label>
+                        <input asp-for="ShippingAddress" class="form-control" placeholder="123 Street Name" />
+                        <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="City" class="form-label"></label>
+                            <input asp-for="City" class="form-control" placeholder="City" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PostalCode" class="form-label">Postal Code</label>
+                            <input asp-for="PostalCode" class="form-control" placeholder="12345" />
+                            <span asp-validation-for="PostalCode" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h4 class="fw-bold mb-4">Payment</h4>
+                    <div class="alert alert-info border-0 py-3">
+                        <i class="bi bi-info-circle me-2"></i> This is a demonstration. No real payment will be processed.
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold mt-4">Confirm Order ($@ViewBag.Total)</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm p-4 sticky-top" style="top: 100px;">
+                <h5 class="fw-bold mb-4">Order Summary</h5>
+                <!-- List items from session for display -->
+                @{
+                    var cart = Context.Session.GetObjectFromJson<List<CartItem>>("Cart");
+                    if (cart != null)
+                    {
+                        foreach (var item in cart)
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="position-relative me-3">
+                                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/40x60" : item.ImageUrl)" 
+                                             class="rounded" style="width: 40px; height: 60px; object-fit: cover;">
+                                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style="font-size: 0.6rem;">
+                                            @item.Quantity
+                                        </span>
+                                    </div>
+                                    <h6 class="mb-0 small fw-bold">@item.Title</h6>
+                                </div>
+                                <span class="small fw-bold">$@item.Total</span>
+                            </div>
+                        }
+                    }
+                }
+                <hr>
+                <div class="d-flex justify-content-between mb-2 mt-4">
+                    <span class="text-muted">Subtotal</span>
+                    <span class="fw-bold">$@ViewBag.Total</span>
+                </div>
+                <div class="d-flex justify-content-between mb-4">
+                    <span class="text-muted">Shipping</span>
+                    <span class="text-success fw-bold">Free</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between mb-0 mt-2">
+                    <h5 class="fw-bold">Total</h5>
+                    <h4 class="fw-bold text-primary">$@ViewBag.Total</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

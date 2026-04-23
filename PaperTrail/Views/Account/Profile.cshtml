@@ -70,11 +70,62 @@
                 <div class="tab-pane fade" id="v-pills-orders" role="tabpanel">
                     <div class="card border-0 shadow-sm p-4">
                         <h5 class="mb-4 fw-bold">Order History</h5>
-                        <div class="text-center py-5">
-                            <i class="bi bi-bag-x fs-1 text-muted d-block mb-3"></i>
-                            <p class="text-muted">You haven't placed any orders yet.</p>
-                            <a href="/" class="btn btn-outline-primary px-4">Start Shopping</a>
-                        </div>
+                        @{
+                            var orders = ViewBag.Orders as IEnumerable<PaperTrail.Models.Order>;
+                            if (orders != null && orders.Any())
+                            {
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Order #</th>
+                                                <th>Date</th>
+                                                <th>Total</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var order in orders)
+                                            {
+                                                <tr>
+                                                    <td>@order.Id</td>
+                                                    <td>@order.OrderDate.ToShortDateString()</td>
+                                                    <td class="fw-bold">$@order.TotalAmount</td>
+                                                    <td>
+                                                        @switch (order.Status)
+                                                        {
+                                                            case PaperTrail.Models.OrderStatus.Pending:
+                                                                <span class="badge bg-warning text-dark">Pending</span>
+                                                                break;
+                                                            case PaperTrail.Models.OrderStatus.Paid:
+                                                                <span class="badge bg-success">Paid</span>
+                                                                break;
+                                                            case PaperTrail.Models.OrderStatus.Shipped:
+                                                                <span class="badge bg-info text-dark">Shipped</span>
+                                                                break;
+                                                            case PaperTrail.Models.OrderStatus.Completed:
+                                                                <span class="badge bg-primary">Completed</span>
+                                                                break;
+                                                            default:
+                                                                <span class="badge bg-secondary">@order.Status</span>
+                                                                break;
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="text-center py-5">
+                                    <i class="bi bi-bag-x fs-1 text-muted d-block mb-3"></i>
+                                    <p class="text-muted">You haven't placed any orders yet.</p>
+                                    <a href="/" class="btn btn-outline-primary px-4">Start Shopping</a>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
             </div>

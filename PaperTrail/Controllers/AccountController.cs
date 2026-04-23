@@ -95,6 +95,13 @@ namespace PaperTrail.Controllers
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return NotFound();
 
+            var orders = await _context.Orders
+                .Where(o => o.UserId == user.Id)
+                .OrderByDescending(o => o.OrderDate)
+                .ToListAsync();
+
+            ViewBag.Orders = orders;
+
             var model = new ProfileViewModel
             {
                 FullName = user.FullName ?? "",
