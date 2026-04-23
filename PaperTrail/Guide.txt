@@ -1,0 +1,134 @@
+#1 Overview
+Design a modern, scalable, and fully responsive Online Bookstore Management System web application using an MVC architecture. The system must support both customer-facing features and an administrative dashboard, focusing on transactions, account management, profile uploads, and search functionality.
+
+#2 Design Style
+2.1 Use a clean, minimalist, and professional aesthetic similar to major e-commerce platforms.
+2.2 Apply a light color scheme with neutral tones and one accent color.
+2.3 Ensure consistent and readable typography.
+2.4 Use card-based layouts and clear visual hierarchy.
+2.5 Make the interface fully responsive across desktop, tablet, and mobile.
+2.6 Include hover effects, loading states, and subtle animations.
+2.7 
+- Editorial
+- Bookstore
+- Library-inspired
+- Warm neutral
+- Premium soft surfaces
+
+
+#3 Authentication and Account Management
+3.1 Implement user registration with name, email, password, and confirmation validation.
+3.2 Provide secure login and logout functionality.
+3.3 Include error handling and feedback messages.
+3.4 Allow users to edit personal details.
+3.5 Allow password updates.
+3.6 Enable profile picture upload with preview and validation.
+3.7 Display user information and order history in profile.
+
+#4 Transaction System
+4.1 Allow users to add books to cart.
+4.2 Support updating quantities and removing items.
+4.3 Provide checkout with order summary and total calculation.
+4.4 Create and store order records after checkout.
+4.5 Include order statuses: pending, paid, shipped, completed.
+4.6 Display transaction history in user profile.
+4.7 Allow admin to manage and update transaction status.
+
+#5 Search Functionality
+5.1 Include a global search bar in the navigation.
+5.2 Support autocomplete or real-time suggestions.
+5.3 Display search results in a grid layout.
+5.4 Provide filters: category, price range, rating.
+5.5 Include sorting: relevance, price, popularity.
+
+#6 Customer Interface
+6.1 Home Page
+
+* Hero banner with featured books or promotions
+* Categories section (Fiction, Non-fiction, Academic, etc.)
+* Featured or best-selling books
+* Navigation bar with search
+
+6.2 Book Listing Page
+
+* Grid layout with book cards (image, title, author, price, rating)
+* Filters and sorting options
+* Pagination or infinite scrolling
+
+6.3 Book Details Page
+
+* Large cover image
+* Title, author, description, price, stock
+* Ratings and reviews
+* Add to Cart and Buy Now buttons
+* Related books section
+
+6.4 Cart Page
+
+* List of selected books
+* Quantity controls
+* Subtotal and total price
+* Checkout button
+
+6.5 Checkout Page
+
+* Order summary
+* Total cost display
+* Confirmation action
+* Success message after checkout
+
+6.6 User Profile Page
+
+* Profile picture upload
+* Editable user details
+* Password update
+* Order history with status indicators
+
+#7 Admin Dashboard
+7.1 Layout
+
+* Sidebar navigation
+
+7.2 Dashboard Overview
+
+* Analytics cards (users, books, sales, orders)
+* Sales charts or graphs
+
+7.3 Manage Books
+
+* Table of books
+* Add, edit, delete functionality
+* Fields: title, author, description, price, category, stock, image upload
+
+7.4 Manage Users
+
+* View, edit, delete users
+
+7.5 Manage Transactions
+
+* View all orders
+* Display user, items, total, status
+* Update order status
+
+#8 UI Components
+8.1 Navigation bar with search
+8.2 Admin sidebar
+8.3 Book cards
+8.4 Data tables
+8.5 Forms with validation
+8.6 Modals for confirmations
+8.7 Dropdown filters
+8.8 Status badges
+
+#9 User Experience
+9.1 Ensure easy navigation
+9.2 Provide fast access to search
+9.3 Use clear call-to-action buttons
+9.4 Maintain consistent spacing and alignment
+9.5 Provide feedback messages and validation
+
+#10 Optional Enhancements
+10.1 Wishlist functionality
+10.2 Dark mode toggle
+10.3 Notifications for order updates
+10.4 Personalized book recommendations
