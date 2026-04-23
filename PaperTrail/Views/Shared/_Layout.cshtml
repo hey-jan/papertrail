@@ -27,14 +27,15 @@
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Books</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Books">Books</a>
                         </li>
                     </ul>
 
                     <div class="search-container mx-auto d-none d-md-block">
-                        <form class="d-flex" action="/Search" method="get">
-                            <input class="form-control search-input" type="search" placeholder="Search for books, authors..." aria-label="Search">
+                        <form class="d-flex" asp-controller="Home" asp-action="Books" method="get">
+                            <input name="search" class="form-control search-input" type="search" placeholder="Search for books, authors..." aria-label="Search" autocomplete="off">
                         </form>
+                        <div id="search-suggestions" class="list-group position-absolute w-100 shadow-sm d-none" style="z-index: 1000; top: 100%;"></div>
                     </div>
 
                     <ul class="navbar-nav align-items-center">

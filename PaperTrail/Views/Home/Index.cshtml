@@ -1,5 +1,7 @@
+@model IEnumerable<PaperTrail.Models.Book>
 @{
     ViewData["Title"] = "Home Page";
+    var categories = ViewBag.Categories as IEnumerable<PaperTrail.Models.Category>;
 }
 
 <section class="hero">
@@ -9,15 +11,13 @@
                 <h1 class="display-3 mb-4">Discover Your Next Favorite Story</h1>
                 <p class="lead mb-5">Explore our curated collection of literary masterpieces, from timeless classics to modern bestsellers.</p>
                 <div class="d-flex">
-                    <a href="#" class="btn btn-primary btn-lg px-4 me-3">Shop Now</a>
-                    <a href="#" class="btn btn-outline-secondary btn-lg px-4">Browse Categories</a>
+                    <a asp-action="Books" class="btn btn-primary btn-lg px-4 me-3">Shop Now</a>
+                    <a href="#categories" class="btn btn-outline-secondary btn-lg px-4">Browse Categories</a>
                 </div>
             </div>
-            <div class="col-lg-6 d-none d-lg-block">
-                <!-- Placeholder for Hero Image -->
-                <div style="background: #e9ecef; border-radius: 20px; height: 400px; display: flex; align-items: center; justify-content: center;">
-                    <i class="bi bi-book" style="font-size: 8rem; color: #dee2e6;"></i>
-                </div>
+            <div class="col-lg-6 d-none d-lg-block text-center">
+                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
+                     alt="Bookshelf" class="img-fluid rounded-3 shadow-lg" style="max-height: 450px;">
             </div>
         </div>
     </div>
@@ -25,96 +25,69 @@
 
 <section class="featured-books py-5">
     <div class="container">
-        <h2 class="section-title">Featured Books</h2>
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <h2 class="section-title mb-0 ms-0 text-start">Newly Arrived</h2>
+            <a asp-action="Books" class="text-accent text-decoration-none fw-bold">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
         <div class="row g-4">
-            <!-- Book 1 -->
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="book-card">
-                    <img src="https://images.unsplash.com/photo-1544947950-fa07a98d237f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Book Cover">
-                    <div class="book-card-body">
-                        <h5 class="book-title">The Midnight Library</h5>
-                        <p class="book-author">Matt Haig</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="book-price">$18.99</span>
-                            <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-plus-lg"></i></button>
+            @foreach (var book in Model)
+            {
+                <div class="col-sm-6 col-md-4 col-lg-3">
+                    <div class="book-card">
+                        <a asp-action="Details" asp-route-id="@book.Id">
+                            <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "https://via.placeholder.com/300x450?text=" + book.Title : book.ImageUrl)" alt="@book.Title">
+                        </a>
+                        <div class="book-card-body">
+                            <a asp-action="Details" asp-route-id="@book.Id" class="text-decoration-none">
+                                <h5 class="book-title">@book.Title</h5>
+                            </a>
+                            <p class="book-author">@book.Author</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="book-price">$@book.Price</span>
+                                <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-plus-lg"></i></button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <!-- Book 2 -->
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="book-card">
-                    <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Book Cover">
-                    <div class="book-card-body">
-                        <h5 class="book-title">Atomic Habits</h5>
-                        <p class="book-author">James Clear</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="book-price">$21.50</span>
-                            <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-plus-lg"></i></button>
-                        </div>
-                    </div>
+            }
+            @if (!Model.Any())
+            {
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No books available yet. Check back soon!</p>
                 </div>
-            </div>
-            <!-- Book 3 -->
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="book-card">
-                    <img src="https://images.unsplash.com/photo-1589829085413-56de8ae18c73?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Book Cover">
-                    <div class="book-card-body">
-                        <h5 class="book-title">The Alchemist</h5>
-                        <p class="book-author">Paulo Coelho</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="book-price">$15.00</span>
-                            <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-plus-lg"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Book 4 -->
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="book-card">
-                    <img src="https://images.unsplash.com/photo-1543004218-ee141104832e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Book Cover">
-                    <div class="book-card-body">
-                        <h5 class="book-title">Project Hail Mary</h5>
-                        <p class="book-author">Andy Weir</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="book-price">$24.99</span>
-                            <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-plus-lg"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
 
-<section class="categories py-5 bg-light">
+<section id="categories" class="categories py-5 bg-light">
     <div class="container">
         <h2 class="section-title">Shop by Category</h2>
         <div class="row g-4 text-center">
-            <div class="col-6 col-md-3">
-                <div class="p-4 bg-white rounded shadow-sm">
-                    <i class="bi bi-feather fs-1 text-accent mb-3 d-block"></i>
-                    <h5>Fiction</h5>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="p-4 bg-white rounded shadow-sm">
-                    <i class="bi bi-journal-text fs-1 text-accent mb-3 d-block"></i>
-                    <h5>Non-Fiction</h5>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="p-4 bg-white rounded shadow-sm">
-                    <i class="bi bi-mortarboard fs-1 text-accent mb-3 d-block"></i>
-                    <h5>Academic</h5>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="p-4 bg-white rounded shadow-sm">
-                    <i class="bi bi-stars fs-1 text-accent mb-3 d-block"></i>
-                    <h5>Bestsellers</h5>
-                </div>
-            </div>
+            @if (categories != null)
+            {
+                foreach (var cat in categories)
+                {
+                    <div class="col-6 col-md-3">
+                        <a asp-action="Books" asp-route-category="@cat.Name" class="text-decoration-none text-dark">
+                            <div class="p-4 bg-white rounded shadow-sm category-hover">
+                                <i class="bi bi-journal-text fs-1 text-accent mb-3 d-block"></i>
+                                <h5>@cat.Name</h5>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
         </div>
     </div>
 </section>
+
+<style>
+    .category-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .category-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+</style>

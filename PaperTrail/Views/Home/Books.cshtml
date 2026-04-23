@@ -1,0 +1,115 @@
+@model IEnumerable<PaperTrail.Models.Book>
+@{
+    ViewData["Title"] = "Browse Books";
+    var categories = ViewBag.Categories as IEnumerable<PaperTrail.Models.Category>;
+    var currentCategory = ViewBag.CurrentCategory as string;
+    var currentSort = ViewBag.CurrentSort as string;
+    var currentSearch = ViewBag.CurrentSearch as string;
+}
+
+<div class="container py-5">
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h5 class="fw-bold mb-4">Filters</h5>
+                
+                <form id="filterForm" method="get">
+                    <input type="hidden" name="search" value="@currentSearch" />
+                    
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase">Categories</label>
+                        <div class="list-group list-group-flush">
+                            <a asp-action="Books" class="list-group-item list-group-item-action border-0 ps-0 @(string.IsNullOrEmpty(currentCategory) ? "text-accent fw-bold" : "")">
+                                All Categories
+                            </a>
+                            @foreach (var cat in categories!)
+                            {
+                                <a asp-action="Books" asp-route-category="@cat.Name" 
+                                   class="list-group-item list-group-item-action border-0 ps-0 @(currentCategory == cat.Name ? "text-accent fw-bold" : "")">
+                                    @cat.Name
+                                </a>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small text-uppercase">Price Range</label>
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <input type="number" name="minPrice" class="form-control form-control-sm" placeholder="Min" />
+                            </div>
+                            <div class="col-6">
+                                <input type="number" name="maxPrice" class="form-control form-control-sm" placeholder="Max" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Apply Filters</button>
+                    <a asp-action="Books" class="btn btn-light w-100 mt-2">Clear All</a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Book Grid -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="fw-bold mb-0">
+                        @(string.IsNullOrEmpty(currentCategory) ? "All Books" : currentCategory)
+                    </h2>
+                    <small class="text-muted">Showing @Model.Count() results</small>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <span class="text-muted me-2 small">Sort by:</span>
+                    <select class="form-select form-select-sm border-0 shadow-sm" style="width: auto;" 
+                            onchange="location.href='?sort=' + this.value + '&category=@currentCategory&search=@currentSearch'">
+                        <option value="newest" selected="@(currentSort == "newest")">Newest</option>
+                        <option value="price_asc" selected="@(currentSort == "price_asc")">Price: Low to High</option>
+                        <option value="price_desc" selected="@(currentSort == "price_desc")">Price: High to Low</option>
+                        <option value="popularity" selected="@(currentSort == "popularity")">Popularity</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(currentSearch))
+            {
+                <div class="alert alert-light border-0 shadow-sm mb-4">
+                    <i class="bi bi-search me-2"></i> Results for "<strong>@currentSearch</strong>"
+                </div>
+            }
+
+            <div class="row g-4">
+                @foreach (var book in Model)
+                {
+                    <div class="col-sm-6 col-md-4">
+                        <div class="book-card">
+                            <a asp-action="Details" asp-route-id="@book.Id">
+                                <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "https://via.placeholder.com/300x450?text=" + book.Title : book.ImageUrl)" alt="@book.Title">
+                            </a>
+                            <div class="book-card-body">
+                                <a asp-action="Details" asp-route-id="@book.Id" class="text-decoration-none">
+                                    <h5 class="book-title">@book.Title</h5>
+                                </a>
+                                <p class="book-author">@book.Author</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="book-price">$@book.Price</span>
+                                    <button class="btn btn-sm btn-outline-primary rounded-circle"><i class="bi bi-plus-lg"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (!Model.Any())
+                {
+                    <div class="col-12 text-center py-5">
+                        <i class="bi bi-search fs-1 text-muted d-block mb-3"></i>
+                        <h4>No books found</h4>
+                        <p class="text-muted">Try adjusting your filters or search terms.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

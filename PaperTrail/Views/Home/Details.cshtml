@@ -1,0 +1,110 @@
+@model PaperTrail.Models.Book
+@{
+    ViewData["Title"] = Model.Title;
+    var relatedBooks = ViewBag.RelatedBooks as IEnumerable<PaperTrail.Models.Book>;
+}
+
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Book Cover -->
+        <div class="col-md-5">
+            <div class="card border-0 shadow-sm p-3 sticky-top" style="top: 100px;">
+                <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://via.placeholder.com/600x900?text=" + Model.Title : Model.ImageUrl)" 
+                     alt="@Model.Title" class="img-fluid rounded shadow">
+            </div>
+        </div>
+
+        <!-- Book Info -->
+        <div class="col-md-7">
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Books" class="text-decoration-none">Books</a></li>
+                    <li class="breadcrumb-item"><a asp-action="Books" asp-route-category="@Model.Category?.Name" class="text-decoration-none">@Model.Category?.Name</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
+                </ol>
+            </nav>
+
+            <h1 class="display-4 fw-bold mb-2">@Model.Title</h1>
+            <h4 class="text-muted mb-4">by @Model.Author</h4>
+
+            <div class="d-flex align-items-center mb-4">
+                <div class="text-warning me-3 fs-4">
+                    @for (int i = 1; i <= 5; i++)
+                    {
+                        if (i <= Model.Rating)
+                        {
+                            <i class="bi bi-star-fill"></i>
+                        }
+                        else
+                        {
+                            <i class="bi bi-star"></i>
+                        }
+                    }
+                </div>
+                <span class="text-muted">(@Model.Rating rating)</span>
+            </div>
+
+            <div class="price-box p-4 bg-light rounded-3 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <span class="text-muted small d-block">Price</span>
+                        <h2 class="fw-bold mb-0">$@Model.Price</h2>
+                    </div>
+                    <div>
+                        @if (Model.Stock > 0)
+                        {
+                            <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 border border-success border-opacity-25">
+                                <i class="bi bi-check-circle me-1"></i> In Stock (@Model.Stock)
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 border border-danger border-opacity-25">
+                                Out of Stock
+                            </span>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <p class="lead text-muted mb-5">
+                @Model.Description
+            </p>
+
+            <div class="d-flex gap-3 mb-5">
+                <button class="btn btn-primary btn-lg px-5 flex-grow-1 @(Model.Stock == 0 ? "disabled" : "")">
+                    <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                </button>
+                <button class="btn btn-outline-secondary btn-lg px-4">
+                    <i class="bi bi-heart"></i>
+                </button>
+            </div>
+
+            <hr class="my-5">
+
+            <!-- Related Books -->
+            @if (relatedBooks != null && relatedBooks.Any())
+            {
+                <h3 class="fw-bold mb-4">You May Also Like</h3>
+                <div class="row g-4">
+                    @foreach (var book in relatedBooks)
+                    {
+                        <div class="col-6 col-lg-3">
+                            <div class="book-card">
+                                <a asp-action="Details" asp-route-id="@book.Id">
+                                    <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "https://via.placeholder.com/300x450?text=" + book.Title : book.ImageUrl)" 
+                                         alt="@book.Title" style="height: 180px;">
+                                </a>
+                                <div class="book-card-body p-2">
+                                    <h6 class="book-title mb-1" style="font-size: 0.9rem; height: 2.2rem;">@book.Title</h6>
+                                    <div class="book-price small">$@book.Price</div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
