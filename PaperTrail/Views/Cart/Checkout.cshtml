@@ -55,8 +55,9 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="d-flex align-items-center">
                                     <div class="position-relative me-3">
-                                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/40x60" : item.ImageUrl)" 
-                                             class="rounded" style="width: 40px; height: 60px; object-fit: cover;">
+                                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/book-placeholder.svg" : item.ImageUrl)" 
+                                             class="rounded" style="width: 40px; height: 60px; object-fit: cover;"
+                                             onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style="font-size: 0.6rem;">
                                             @item.Quantity
                                         </span>

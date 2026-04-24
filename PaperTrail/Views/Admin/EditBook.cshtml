@@ -65,8 +65,9 @@
                 <div class="mb-4">
                     <label asp-for="ImageFile" class="form-label"></label>
                     <div class="mb-3 text-center border rounded p-3 bg-light">
-                        <img id="imagePreview" src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://via.placeholder.com/150x220?text=No+Image" : Model.ImageUrl)" 
-                             class="img-fluid rounded shadow-sm" style="max-height: 220px;">
+                        <img id="imagePreview" src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "/images/book-placeholder.svg" : Model.ImageUrl)" 
+                             class="img-fluid rounded shadow-sm" style="max-height: 220px;"
+                             onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                     </div>
                     <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" onchange="previewBookImage(this)" />
                     <small class="text-muted">Leave empty to keep existing image</small>

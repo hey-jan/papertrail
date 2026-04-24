@@ -28,8 +28,9 @@
                     <tr>
                         <td class="ps-4">
                             <div class="d-flex align-items-center">
-                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/40x60" : item.ImageUrl)" 
-                                     class="rounded me-3" style="width: 40px; height: 60px; object-fit: cover;">
+                                <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/book-placeholder.svg" : item.ImageUrl)" 
+                                     class="rounded me-3" style="width: 40px; height: 60px; object-fit: cover;"
+                                     onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                                 <div>
                                     <div class="fw-bold">@item.Title</div>
                                     <small class="text-muted">@item.Author</small>

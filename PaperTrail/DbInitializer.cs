@@ -84,6 +84,9 @@ namespace PaperTrail
                                     Stock = bookData.Stock,
                                     CategoryId = category.Id,
                                     ImageUrl = bookData.ImageUrl,
+                                    ISBN = bookData.ISBN,
+                                    Publisher = bookData.Publisher,
+                                    PublishedDate = bookData.PublishedDate,
                                     Rating = bookData.Rating
                                 });
                             }
@@ -108,6 +111,9 @@ namespace PaperTrail
             public int Stock { get; set; }
             public string Category { get; set; } = string.Empty;
             public string ImageUrl { get; set; } = string.Empty;
+            public string? ISBN { get; set; }
+            public string? Publisher { get; set; }
+            public string? PublishedDate { get; set; }
             public double Rating { get; set; }
         }
     }

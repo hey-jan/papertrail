@@ -80,13 +80,17 @@
                 </div>
             }
 
-            <div class="row g-4">
+            <div class="row g-4 browse-books-grid">
                 @foreach (var book in Model)
                 {
                     <div class="col-sm-6 col-md-4">
                         <div class="book-card">
                             <a asp-action="Details" asp-route-id="@book.Id">
-                                <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "https://via.placeholder.com/300x450?text=" + book.Title : book.ImageUrl)" alt="@book.Title">
+                                <div class="browse-book-cover">
+                                    <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "/images/book-placeholder.svg" : book.ImageUrl)" 
+                                         alt="@book.Title" referrerpolicy="no-referrer"
+                                         onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
+                                </div>
                             </a>
                             <div class="book-card-body">
                                 <a asp-action="Details" asp-route-id="@book.Id" class="text-decoration-none">

@@ -9,8 +9,9 @@
         <!-- Book Cover -->
         <div class="col-md-5">
             <div class="card border-0 shadow-sm p-3 sticky-top" style="top: 100px;">
-                <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "https://via.placeholder.com/600x900?text=" + Model.Title : Model.ImageUrl)" 
-                     alt="@Model.Title" class="img-fluid rounded shadow">
+                <img src="@(string.IsNullOrEmpty(Model.ImageUrl) ? "/images/book-placeholder.svg" : Model.ImageUrl)" 
+                     alt="@Model.Title" class="img-fluid rounded shadow" referrerpolicy="no-referrer"
+                     onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
             </div>
         </div>
 
@@ -96,8 +97,9 @@
                         <div class="col-6 col-lg-3">
                             <div class="book-card">
                                 <a asp-action="Details" asp-route-id="@book.Id">
-                                    <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "https://via.placeholder.com/300x450?text=" + book.Title : book.ImageUrl)" 
-                                         alt="@book.Title" style="height: 180px;">
+                                    <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "/images/book-placeholder.svg" : book.ImageUrl)" 
+                                         alt="@book.Title" style="height: 180px;" referrerpolicy="no-referrer"
+                                         onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                                 </a>
                                 <div class="book-card-body p-2">
                                     <h6 class="book-title mb-1" style="font-size: 0.9rem; height: 2.2rem;">@book.Title</h6>
