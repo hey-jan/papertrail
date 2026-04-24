@@ -114,6 +114,14 @@ namespace PaperTrail.Controllers
 
                 foreach (var item in cart)
                 {
+                    var book = await _context.Books.FindAsync(item.BookId);
+                    if (book == null || book.Stock < item.Quantity)
+                    {
+                        ModelState.AddModelError(string.Empty, $"Insufficient stock for {item.Title}. Available: {(book?.Stock ?? 0)}");
+                        ViewBag.Total = cart.Sum(i => i.Total);
+                        return View(order);
+                    }
+
                     order.OrderItems.Add(new OrderItem
                     {
                         BookId = item.BookId,
@@ -122,12 +130,8 @@ namespace PaperTrail.Controllers
                     });
 
                     // Update Stock
-                    var book = await _context.Books.FindAsync(item.BookId);
-                    if (book != null)
-                    {
-                        book.Stock -= item.Quantity;
-                        _context.Update(book);
-                    }
+                    book.Stock -= item.Quantity;
+                    _context.Update(book);
                 }
 
                 _context.Orders.Add(order);

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,16 +9,24 @@ using PaperTrail.ViewModels;
 
 namespace PaperTrail.Controllers
 {
-    [Authorize] // Should be [Authorize(Roles = "Admin")] in production
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AdminController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public AdminController(
+            ApplicationDbContext context, 
+            IWebHostEnvironment webHostEnvironment,
+            UserManager<ApplicationUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<IActionResult> Index()
@@ -25,10 +34,105 @@ namespace PaperTrail.Controllers
             ViewBag.UserCount = await _context.Users.CountAsync();
             ViewBag.BookCount = await _context.Books.CountAsync();
             ViewBag.OrderCount = await _context.Orders.CountAsync();
-            ViewBag.TotalSales = await _context.Orders.SumAsync(o => o.TotalAmount);
+            
+            var successfulStatuses = new[] { OrderStatus.Paid, OrderStatus.Shipped, OrderStatus.Completed };
+            ViewBag.TotalSales = await _context.Orders
+                .Where(o => successfulStatuses.Contains(o.Status))
+                .SumAsync(o => (decimal?)o.TotalAmount) ?? 0;
 
             return View();
         }
+
+        #region User Management
+        public async Task<IActionResult> Users()
+        {
+            var users = await _userManager.Users.ToListAsync();
+            var userRoles = new Dictionary<string, IList<string>>();
+            foreach (var user in users)
+            {
+                userRoles[user.Id] = await _userManager.GetRolesAsync(user);
+            }
+            ViewBag.UserRoles = userRoles;
+            return View(users);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null) return NotFound();
+
+            var roles = await _roleManager.Roles.Select(r => r.Name!).ToListAsync();
+            var userRoles = await _userManager.GetRolesAsync(user);
+
+            var model = new EditUserViewModel
+            {
+                Id = user.Id,
+                Email = user.Email!,
+                FullName = user.FullName ?? "",
+                SelectedRoles = userRoles.ToList(),
+                AllRoles = roles
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.Id);
+                if (user == null) return NotFound();
+
+                user.FullName = model.FullName;
+                user.Email = model.Email;
+                user.UserName = model.Email;
+
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    var currentRoles = await _userManager.GetRolesAsync(user);
+                    var rolesToAdd = model.SelectedRoles.Except(currentRoles);
+                    var rolesToRemove = currentRoles.Except(model.SelectedRoles);
+
+                    await _userManager.AddToRolesAsync(user, rolesToAdd);
+                    await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+
+                    return RedirectToAction(nameof(Users));
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            model.AllRoles = await _roleManager.Roles.Select(r => r.Name!).ToListAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                // Prevent deleting self
+                var currentUser = await _userManager.GetUserAsync(User);
+                if (currentUser?.Id == user.Id)
+                {
+                    TempData["Error"] = "You cannot delete your own admin account.";
+                    return RedirectToAction(nameof(Users));
+                }
+
+                await _userManager.DeleteAsync(user);
+            }
+            return RedirectToAction(nameof(Users));
+        }
+        #endregion
 
         #region Book Management
         public async Task<IActionResult> Books()

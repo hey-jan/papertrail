@@ -71,4 +71,20 @@ namespace PaperTrail.ViewModels
         [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = string.Empty;
     }
+
+    public class EditUserViewModel
+    {
+        public string Id { get; set; } = string.Empty;
+
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Full Name")]
+        public string FullName { get; set; } = string.Empty;
+
+        public List<string> SelectedRoles { get; set; } = new List<string>();
+        public List<string> AllRoles { get; set; } = new List<string>();
+    }
 }

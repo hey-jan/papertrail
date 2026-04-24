@@ -1,20 +1,4 @@
-#1 Overview
-Design a modern, scalable, and fully responsive Online Bookstore Management System web application using an MVC architecture. The system must support both customer-facing features and an administrative dashboard, focusing on transactions, account management, profile uploads, and search functionality.
-
 #2 Design Style
-2.1 Use a clean, minimalist, and professional aesthetic similar to major e-commerce platforms.
-2.2 Apply a light color scheme with neutral tones and one accent color.
-2.3 Ensure consistent and readable typography.
-2.4 Use card-based layouts and clear visual hierarchy.
-2.5 Make the interface fully responsive across desktop, tablet, and mobile.
-2.6 Include hover effects, loading states, and subtle animations.
-2.7 
-- Editorial
-- Bookstore
-- Library-inspired
-- Warm neutral
-- Premium soft surfaces
-
 
 #3 Authentication and Account Management
 3.1 Implement user registration with name, email, password, and confirmation validation.
