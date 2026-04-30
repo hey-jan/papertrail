@@ -42,7 +42,7 @@
                                 @item.Category?.Name
                             </span>
                         </td>
-                        <td>$@item.Price</td>
+                        <td>@item.Price.ToPeso()</td>
                         <td>
                             @if (item.Stock < 10)
                             {

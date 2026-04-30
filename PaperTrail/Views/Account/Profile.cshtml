@@ -90,7 +90,7 @@
                                                 <tr>
                                                     <td>@order.Id</td>
                                                     <td>@order.OrderDate.ToShortDateString()</td>
-                                                    <td class="fw-bold">$@order.TotalAmount</td>
+                                                    <td class="fw-bold">@order.TotalAmount.ToPeso()</td>
                                                     <td>
                                                         @switch (order.Status)
                                                         {

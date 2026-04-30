@@ -50,7 +50,7 @@
                 <div class="d-flex justify-content-between align-items-center">
                     <div>
                         <span class="text-muted small d-block">Price</span>
-                        <h2 class="fw-bold mb-0">$@Model.Price</h2>
+                        <h2 class="fw-bold mb-0">@Model.Price.ToPeso()</h2>
                     </div>
                     <div>
                         @if (Model.Stock > 0)
@@ -103,7 +103,7 @@
                                 </a>
                                 <div class="book-card-body p-2">
                                     <h6 class="book-title mb-1" style="font-size: 0.9rem; height: 2.2rem;">@book.Title</h6>
-                                    <div class="book-price small">$@book.Price</div>
+                                    <div class="book-price small">@book.Price.ToPeso()</div>
                                 </div>
                             </div>
                         </div>

@@ -56,49 +56,85 @@ namespace PaperTrail
                 context.SaveChanges();
             }
 
-            // Seed Books from books.json
-            if (!context.Books.Any())
+            // Seed Books from books.json. Existing titles are preserved; missing books are added.
+            try
             {
-                try
+                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "books.json");
+                if (File.Exists(filePath))
                 {
-                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), "books.json");
-                    if (File.Exists(filePath))
+                    string jsonString = File.ReadAllText(filePath);
+                    var booksData = JsonSerializer.Deserialize<List<BookJson>>(jsonString);
+
+                    if (booksData != null)
                     {
-                        string jsonString = File.ReadAllText(filePath);
-                        var booksData = JsonSerializer.Deserialize<List<BookJson>>(jsonString);
-
-                        if (booksData != null)
+                        var categories = context.Categories.ToList();
+                        var existingBooks = context.Books.ToList();
+                        var retiredSeedBooks = new[]
                         {
-                            var categories = context.Categories.ToList();
-                            foreach (var bookData in booksData)
-                            {
-                                var category = categories.FirstOrDefault(c => c.Name == bookData.Category) 
-                                               ?? categories.First(c => c.Name == "Fiction");
+                            ("The Seven Husbands of Evelyn Hugo", "Taylor Jenkins Reid")
+                        };
 
-                                context.Books.Add(new Book
-                                {
-                                    Title = bookData.Title,
-                                    Author = bookData.Author,
-                                    Description = bookData.Description,
-                                    Price = bookData.Price,
-                                    Stock = bookData.Stock,
-                                    CategoryId = category.Id,
-                                    ImageUrl = bookData.ImageUrl,
-                                    ISBN = bookData.ISBN,
-                                    Publisher = bookData.Publisher,
-                                    PublishedDate = bookData.PublishedDate,
-                                    Rating = bookData.Rating
-                                });
-                            }
-                            context.SaveChanges();
+                        var booksToRemove = existingBooks
+                            .Where(b => retiredSeedBooks.Any(retired =>
+                                b.Title == retired.Item1 && b.Author == retired.Item2))
+                            .ToList();
+
+                        if (booksToRemove.Count > 0)
+                        {
+                            context.Books.RemoveRange(booksToRemove);
+                            existingBooks = existingBooks.Except(booksToRemove).ToList();
                         }
+
+                        foreach (var bookData in booksData)
+                        {
+                            var category = categories.FirstOrDefault(c => c.Name == bookData.Category)
+                                           ?? categories.First(c => c.Name == "Fiction");
+
+                            var existingBook = existingBooks.FirstOrDefault(b =>
+                                (!string.IsNullOrWhiteSpace(bookData.ISBN) && b.ISBN == bookData.ISBN) ||
+                                (b.Title == bookData.Title && b.Author == bookData.Author));
+
+                            if (existingBook != null)
+                            {
+                                existingBook.Description = bookData.Description;
+                                existingBook.Price = bookData.Price;
+                                existingBook.Stock = bookData.Stock;
+                                existingBook.CategoryId = category.Id;
+                                existingBook.ImageUrl = bookData.ImageUrl;
+                                existingBook.ISBN = bookData.ISBN;
+                                existingBook.Publisher = bookData.Publisher;
+                                existingBook.PublishedDate = bookData.PublishedDate;
+                                existingBook.Rating = bookData.Rating;
+                                continue;
+                            }
+
+                            var book = new Book
+                            {
+                                Title = bookData.Title,
+                                Author = bookData.Author,
+                                Description = bookData.Description,
+                                Price = bookData.Price,
+                                Stock = bookData.Stock,
+                                CategoryId = category.Id,
+                                ImageUrl = bookData.ImageUrl,
+                                ISBN = bookData.ISBN,
+                                Publisher = bookData.Publisher,
+                                PublishedDate = bookData.PublishedDate,
+                                Rating = bookData.Rating
+                            };
+
+                            context.Books.Add(book);
+                            existingBooks.Add(book);
+                        }
+
+                        context.SaveChanges();
                     }
                 }
-                catch (Exception ex)
-                {
-                    // Log error or handle gracefully
-                    Console.WriteLine($"Error seeding books: {ex.Message}");
-                }
+            }
+            catch (Exception ex)
+            {
+                // Log error or handle gracefully
+                Console.WriteLine($"Error seeding books: {ex.Message}");
             }
         }
 
