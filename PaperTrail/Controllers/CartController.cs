@@ -147,9 +147,12 @@ namespace PaperTrail.Controllers
             return View(order);
         }
 
-        public IActionResult Success(int id)
+        public async Task<IActionResult> Success(int id)
         {
-            ViewBag.OrderId = id;
+            var order = await _context.Orders.FindAsync(id);
+            if (order == null) return NotFound();
+
+            ViewBag.OrderNumber = order.OrderNumber;
             return View();
         }
     }

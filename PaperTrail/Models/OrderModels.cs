@@ -1,4 +1,6 @@
 using System.ComponentModel.DataAnnotations;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace PaperTrail.Models
 {
@@ -13,6 +15,8 @@ namespace PaperTrail.Models
 
     public class Order
     {
+        private const string OrderCodeAlphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
         public int Id { get; set; }
         public string UserId { get; set; } = string.Empty;
         public virtual ApplicationUser? User { get; set; }
@@ -30,6 +34,22 @@ namespace PaperTrail.Models
         public string PostalCode { get; set; } = string.Empty;
 
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        public string OrderNumber => $"{OrderDate:yyMMdd}{GenerateOrderSuffix()}";
+
+        private string GenerateOrderSuffix()
+        {
+            var seed = $"{Id}|{UserId}|{OrderDate:O}";
+            var hash = SHA256.HashData(Encoding.UTF8.GetBytes(seed));
+            var builder = new StringBuilder(8);
+
+            for (int i = 0; i < 8; i++)
+            {
+                builder.Append(OrderCodeAlphabet[hash[i] % OrderCodeAlphabet.Length]);
+            }
+
+            return builder.ToString();
+        }
     }
 
     public class OrderItem

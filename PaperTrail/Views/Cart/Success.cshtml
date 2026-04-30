@@ -11,12 +11,12 @@
                 </div>
                 <h2 class="fw-bold mb-3">Thank You for Your Order!</h2>
                 <p class="text-muted mb-4 lead">
-                    Your order #@ViewBag.OrderId has been placed successfully and is being processed. 
+                    Your order #@ViewBag.OrderNumber has been placed successfully and is being processed. 
                     We've sent a confirmation email with all the details.
                 </p>
                 <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                     <a asp-controller="Home" asp-action="Index" class="btn btn-primary btn-lg px-4">Continue Shopping</a>
-                    <a asp-controller="Account" asp-action="Profile" class="btn btn-outline-secondary btn-lg px-4">View Order History</a>
+                    <a asp-controller="Account" asp-action="Orders" class="btn btn-outline-secondary btn-lg px-4">View Order History</a>
                 </div>
             </div>
         </div>

@@ -1,0 +1,118 @@
+@model IEnumerable<PaperTrail.Models.Order>
+@{
+    ViewData["Title"] = "My Orders";
+}
+
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-1">My Orders</h2>
+            <p class="text-muted mb-0">Track your purchases and current order statuses.</p>
+        </div>
+        <a asp-controller="Home" asp-action="Books" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+        </a>
+    </div>
+
+    @if (Model.Any())
+    {
+        <div class="d-grid gap-4">
+            @foreach (var order in Model)
+            {
+                <div class="card border-0 shadow-sm overflow-hidden">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
+                            <div>
+                                <div class="small text-muted mb-1">Order #@order.OrderNumber</div>
+                                <h5 class="fw-bold mb-1">@order.OrderDate.ToString("MMMM dd, yyyy")</h5>
+                                <div class="text-muted">@order.TotalAmount.ToPeso()</div>
+                            </div>
+                            <div class="text-lg-end">
+                                @switch (order.Status)
+                                {
+                                    case PaperTrail.Models.OrderStatus.Pending:
+                                        <span class="badge bg-warning text-dark px-3 py-2">Pending</span>
+                                        break;
+                                    case PaperTrail.Models.OrderStatus.Paid:
+                                        <span class="badge bg-success px-3 py-2">Paid</span>
+                                        break;
+                                    case PaperTrail.Models.OrderStatus.Shipped:
+                                        <span class="badge bg-info text-dark px-3 py-2">Shipped</span>
+                                        break;
+                                    case PaperTrail.Models.OrderStatus.Completed:
+                                        <span class="badge bg-primary px-3 py-2">Completed</span>
+                                        break;
+                                    case PaperTrail.Models.OrderStatus.Cancelled:
+                                        <span class="badge bg-danger px-3 py-2">Cancelled</span>
+                                        break;
+                                    default:
+                                        <span class="badge bg-secondary px-3 py-2">@order.Status</span>
+                                        break;
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-lg-8">
+                                <h6 class="fw-bold mb-3">Items</h6>
+                                <div class="table-responsive">
+                                    <table class="table align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Book</th>
+                                                <th class="text-center">Qty</th>
+                                                <th class="text-end">Price</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in order.OrderItems)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="d-flex align-items-center">
+                                                            <img src="@(string.IsNullOrEmpty(item.Book?.ImageUrl) ? "/images/book-placeholder.svg" : item.Book.ImageUrl)"
+                                                                 class="rounded me-3" style="width: 48px; height: 72px; object-fit: cover;" referrerpolicy="no-referrer"
+                                                                 onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
+                                                            <div>
+                                                                <div class="fw-semibold">@item.Book?.Title</div>
+                                                                <small class="text-muted">@item.Book?.Author</small>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="text-center">@item.Quantity</td>
+                                                    <td class="text-end">@((item.Price * item.Quantity).ToPeso())</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <h6 class="fw-bold mb-3">Shipping Details</h6>
+                                <div class="bg-light rounded p-3 h-100">
+                                    <div class="small text-muted mb-1">Address</div>
+                                    <div class="fw-semibold mb-3">@order.ShippingAddress</div>
+                                    <div class="small text-muted mb-1">City</div>
+                                    <div class="fw-semibold mb-3">@order.City</div>
+                                    <div class="small text-muted mb-1">Postal Code</div>
+                                    <div class="fw-semibold">@order.PostalCode</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="card border-0 shadow-sm text-center py-5">
+            <div class="card-body">
+                <i class="bi bi-bag-x fs-1 text-muted d-block mb-3"></i>
+                <h4 class="fw-bold">No orders yet</h4>
+                <p class="text-muted mb-4">You have not placed any orders yet.</p>
+                <a asp-controller="Home" asp-action="Books" class="btn btn-primary px-4">Start Shopping</a>
+            </div>
+        </div>
+    }
+</div>
