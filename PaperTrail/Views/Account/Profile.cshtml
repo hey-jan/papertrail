@@ -84,7 +84,6 @@
                                                 <th>Order #</th>
                                                 <th>Date</th>
                                                 <th>Total</th>
-                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -94,26 +93,6 @@
                                                     <td>@order.OrderNumber</td>
                                                     <td>@order.OrderDate.ToShortDateString()</td>
                                                     <td class="fw-bold">@order.TotalAmount.ToPeso()</td>
-                                                    <td>
-                                                        @switch (order.Status)
-                                                        {
-                                                            case PaperTrail.Models.OrderStatus.Pending:
-                                                                <span class="badge bg-warning text-dark">Pending</span>
-                                                                break;
-                                                            case PaperTrail.Models.OrderStatus.Paid:
-                                                                <span class="badge bg-success">Paid</span>
-                                                                break;
-                                                            case PaperTrail.Models.OrderStatus.Shipped:
-                                                                <span class="badge bg-info text-dark">Shipped</span>
-                                                                break;
-                                                            case PaperTrail.Models.OrderStatus.Completed:
-                                                                <span class="badge bg-primary">Completed</span>
-                                                                break;
-                                                            default:
-                                                                <span class="badge bg-secondary">@order.Status</span>
-                                                                break;
-                                                        }
-                                                    </td>
                                                 </tr>
                                             }
                                         </tbody>

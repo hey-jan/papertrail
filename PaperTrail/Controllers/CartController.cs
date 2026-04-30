@@ -109,7 +109,7 @@ namespace PaperTrail.Controllers
             {
                 order.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
                 order.OrderDate = DateTime.UtcNow;
-                order.Status = OrderStatus.Pending;
+                order.Status = OrderStatus.Confirmed;
                 order.TotalAmount = cart.Sum(i => i.Total);
 
                 foreach (var item in cart)

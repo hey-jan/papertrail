@@ -6,7 +6,7 @@ namespace PaperTrail.Models
 {
     public enum OrderStatus
     {
-        Pending,
+        Confirmed,
         Paid,
         Shipped,
         Completed,
@@ -23,7 +23,7 @@ namespace PaperTrail.Models
 
         public DateTime OrderDate { get; set; } = DateTime.UtcNow;
         public decimal TotalAmount { get; set; }
-        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public OrderStatus Status { get; set; } = OrderStatus.Confirmed;
 
         // Shipping Details
         [Required]

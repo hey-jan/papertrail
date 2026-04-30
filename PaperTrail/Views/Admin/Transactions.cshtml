@@ -15,7 +15,6 @@
                     <th>Customer</th>
                     <th>Date</th>
                     <th>Total</th>
-                    <th>Status</th>
                     <th class="text-end pe-4">Update Status</th>
                 </tr>
             </thead>
@@ -30,26 +29,6 @@
                         </td>
                         <td>@item.OrderDate.ToString("MMM dd, yyyy")</td>
                         <td class="fw-bold">@item.TotalAmount.ToPeso()</td>
-                        <td>
-                            @switch (item.Status)
-                            {
-                                case PaperTrail.Models.OrderStatus.Pending:
-                                    <span class="badge bg-warning text-dark">Pending</span>
-                                    break;
-                                case PaperTrail.Models.OrderStatus.Paid:
-                                    <span class="badge bg-success">Paid</span>
-                                    break;
-                                case PaperTrail.Models.OrderStatus.Shipped:
-                                    <span class="badge bg-info text-dark">Shipped</span>
-                                    break;
-                                case PaperTrail.Models.OrderStatus.Completed:
-                                    <span class="badge bg-primary">Completed</span>
-                                    break;
-                                default:
-                                    <span class="badge bg-secondary">@item.Status</span>
-                                    break;
-                            }
-                        </td>
                         <td class="text-end pe-4">
                             <form asp-action="UpdateOrderStatus" method="post" class="d-inline-block">
                                 <input type="hidden" name="id" value="@item.Id" />
@@ -66,7 +45,7 @@
                 @if (!Model.Any())
                 {
                     <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">No transactions found.</td>
+                        <td colspan="5" class="text-center py-5 text-muted">No transactions found.</td>
                     </tr>
                 }
             </tbody>
