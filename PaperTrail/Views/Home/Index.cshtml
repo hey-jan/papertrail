@@ -35,7 +35,9 @@
                 <div class="col-sm-6 col-md-4 col-lg-3">
                     <div class="book-card">
                         <a asp-action="Details" asp-route-id="@book.Id">
-                            <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "https://via.placeholder.com/300x450?text=" + book.Title : book.ImageUrl)" alt="@book.Title">
+                            <img src="@(string.IsNullOrEmpty(book.ImageUrl) ? "/images/book-placeholder.svg" : book.ImageUrl)" 
+                                 alt="@book.Title" referrerpolicy="no-referrer"
+                                 onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                         </a>
                         <div class="book-card-body">
                             <a asp-action="Details" asp-route-id="@book.Id" class="text-decoration-none">
@@ -43,7 +45,7 @@
                             </a>
                             <p class="book-author">@book.Author</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <span class="book-price">$@book.Price</span>
+                                <span class="book-price">@book.Price.ToPeso()</span>
                                 <form asp-controller="Cart" asp-action="AddToCart" method="post">
                                     <input type="hidden" name="id" value="@book.Id" />
                                     <button type="submit" class="btn btn-sm btn-outline-primary rounded-circle @(book.Stock == 0 ? "disabled" : "")"><i class="bi bi-plus-lg"></i></button>

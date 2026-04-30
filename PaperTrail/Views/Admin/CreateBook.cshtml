@@ -62,8 +62,9 @@
                 <div class="mb-4">
                     <label asp-for="ImageFile" class="form-label"></label>
                     <div class="mb-3 text-center border rounded p-3 bg-light">
-                        <img id="imagePreview" src="https://via.placeholder.com/150x220?text=No+Image" 
-                             class="img-fluid rounded shadow-sm" style="max-height: 220px;">
+                        <img id="imagePreview" src="/images/book-placeholder.svg" 
+                             class="img-fluid rounded shadow-sm" style="max-height: 220px;"
+                             onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                     </div>
                     <input asp-for="ImageFile" class="form-control" type="file" accept="image/*" onchange="previewBookImage(this)" />
                     <span asp-validation-for="ImageFile" class="text-danger"></span>

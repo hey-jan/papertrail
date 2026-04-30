@@ -80,6 +80,21 @@ h1, h2, h3, h4, h5, h6 {
     object-fit: cover;
 }
 
+.browse-books-grid .book-card img {
+    height: 100%;
+    object-fit: contain;
+    background-color: #f5efe8;
+}
+
+.browse-books-grid .browse-book-cover {
+    aspect-ratio: 2 / 3;
+    background-color: #f5efe8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem;
+}
+
 .book-card-body {
     padding: 1.25rem;
 }

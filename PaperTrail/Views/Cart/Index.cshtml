@@ -27,14 +27,15 @@
                                 <tr>
                                     <td class="ps-4">
                                         <div class="d-flex align-items-center">
-                                            <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/60x90" : item.ImageUrl)" 
-                                                 class="rounded me-3" style="width: 60px; height: 90px; object-fit: cover;">
+                                            <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/book-placeholder.svg" : item.ImageUrl)" 
+                                                 class="rounded me-3" style="width: 60px; height: 90px; object-fit: cover;" referrerpolicy="no-referrer"
+                                                 onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                                             <div>
                                                 <h6 class="fw-bold mb-0">@item.Title</h6>
                                             </div>
                                         </div>
                                     </td>
-                                    <td>$@item.Price</td>
+                                    <td>@item.Price.ToPeso()</td>
                                     <td>
                                         <form asp-action="UpdateQuantity" method="post" class="d-flex align-items-center" style="max-width: 120px;">
                                             <input type="hidden" name="id" value="@item.BookId" />
@@ -43,7 +44,7 @@
                                                    onchange="this.form.submit()" />
                                         </form>
                                     </td>
-                                    <td class="fw-bold">$@item.Total</td>
+                                    <td class="fw-bold">@item.Total.ToPeso()</td>
                                     <td class="pe-4 text-end">
                                         <form asp-action="Remove" method="post">
                                             <input type="hidden" name="id" value="@item.BookId" />
@@ -67,7 +68,7 @@
                     <h5 class="fw-bold mb-4">Order Summary</h5>
                     <div class="d-flex justify-content-between mb-2">
                         <span>Subtotal</span>
-                        <span>$@ViewBag.Total</span>
+                        <span>@(((decimal)ViewBag.Total).ToPeso())</span>
                     </div>
                     <div class="d-flex justify-content-between mb-4">
                         <span>Shipping</span>
@@ -76,7 +77,7 @@
                     <hr>
                     <div class="d-flex justify-content-between mb-4 mt-2">
                         <h5 class="fw-bold">Total</h5>
-                        <h5 class="fw-bold">$@ViewBag.Total</h5>
+                        <h5 class="fw-bold">@(((decimal)ViewBag.Total).ToPeso())</h5>
                     </div>
                     <a asp-action="Checkout" class="btn btn-primary btn-lg w-100 py-3 fw-bold">Proceed to Checkout</a>
                 </div>

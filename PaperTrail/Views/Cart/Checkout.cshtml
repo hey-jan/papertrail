@@ -37,7 +37,7 @@
                         <i class="bi bi-info-circle me-2"></i> This is a demonstration. No real payment will be processed.
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold mt-4">Confirm Order ($@ViewBag.Total)</button>
+                    <button type="submit" class="btn btn-primary btn-lg w-100 py-3 fw-bold mt-4">Confirm Order (@(((decimal)ViewBag.Total).ToPeso()))</button>
                 </form>
             </div>
         </div>
@@ -55,15 +55,16 @@
                             <div class="d-flex justify-content-between align-items-center mb-3">
                                 <div class="d-flex align-items-center">
                                     <div class="position-relative me-3">
-                                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "https://via.placeholder.com/40x60" : item.ImageUrl)" 
-                                             class="rounded" style="width: 40px; height: 60px; object-fit: cover;">
+                                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/book-placeholder.svg" : item.ImageUrl)" 
+                                             class="rounded" style="width: 40px; height: 60px; object-fit: cover;"
+                                             onerror="this.onerror=null;this.src='/images/book-placeholder.svg';">
                                         <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary" style="font-size: 0.6rem;">
                                             @item.Quantity
                                         </span>
                                     </div>
                                     <h6 class="mb-0 small fw-bold">@item.Title</h6>
                                 </div>
-                                <span class="small fw-bold">$@item.Total</span>
+                                <span class="small fw-bold">@item.Total.ToPeso()</span>
                             </div>
                         }
                     }
@@ -71,7 +72,7 @@
                 <hr>
                 <div class="d-flex justify-content-between mb-2 mt-4">
                     <span class="text-muted">Subtotal</span>
-                    <span class="fw-bold">$@ViewBag.Total</span>
+                    <span class="fw-bold">@(((decimal)ViewBag.Total).ToPeso())</span>
                 </div>
                 <div class="d-flex justify-content-between mb-4">
                     <span class="text-muted">Shipping</span>
@@ -80,7 +81,7 @@
                 <hr>
                 <div class="d-flex justify-content-between mb-0 mt-2">
                     <h5 class="fw-bold">Total</h5>
-                    <h4 class="fw-bold text-primary">$@ViewBag.Total</h4>
+                    <h4 class="fw-bold text-primary">@(((decimal)ViewBag.Total).ToPeso())</h4>
                 </div>
             </div>
         </div>

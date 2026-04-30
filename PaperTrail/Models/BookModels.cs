@@ -37,6 +37,15 @@ namespace PaperTrail.Models
 
         public string? ImageUrl { get; set; }
 
+        [StringLength(20)]
+        public string? ISBN { get; set; }
+
+        [StringLength(255)]
+        public string? Publisher { get; set; }
+
+        [StringLength(20)]
+        public string? PublishedDate { get; set; }
+
         [Range(0, 5)]
         public double Rating { get; set; } = 0;
 
