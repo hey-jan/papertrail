@@ -6,17 +6,22 @@
 <ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
+    var currentUser = UserManager.GetUserAsync(User).Result;
+    var displayName = !string.IsNullOrWhiteSpace(currentUser?.FirstName)
+        ? currentUser.FirstName
+        : UserManager.GetUserName(User);
+
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            @if (!string.IsNullOrEmpty(UserManager.GetUserAsync(User).Result?.ProfilePicture))
+            @if (!string.IsNullOrEmpty(currentUser?.ProfilePicture))
             {
-                <img src="@UserManager.GetUserAsync(User).Result?.ProfilePicture" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
+                <img src="@currentUser.ProfilePicture" class="rounded-circle me-2" style="width: 30px; height: 30px; object-fit: cover;">
             }
             else
             {
                 <i class="bi bi-person-circle fs-5 me-2"></i>
             }
-            <span>@UserManager.GetUserName(User)</span>
+            <span>@displayName</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a></li>
