@@ -99,12 +99,17 @@ namespace PaperTrail
                                 existingBook.Description = bookData.Description;
                                 existingBook.Price = bookData.Price;
                                 existingBook.Stock = bookData.Stock;
-                                existingBook.CategoryId = category.Id;
                                 existingBook.ImageUrl = bookData.ImageUrl;
                                 existingBook.ISBN = bookData.ISBN;
                                 existingBook.Publisher = bookData.Publisher;
                                 existingBook.PublishedDate = bookData.PublishedDate;
                                 existingBook.Rating = bookData.Rating;
+
+                                if (existingBook.Categories == null) existingBook.Categories = new List<Category>();
+                                if (!existingBook.Categories.Any(c => c.Id == category.Id))
+                                {
+                                    existingBook.Categories.Add(category);
+                                }
                                 continue;
                             }
 
@@ -115,7 +120,7 @@ namespace PaperTrail
                                 Description = bookData.Description,
                                 Price = bookData.Price,
                                 Stock = bookData.Stock,
-                                CategoryId = category.Id,
+                                Categories = new List<Category> { category },
                                 ImageUrl = bookData.ImageUrl,
                                 ISBN = bookData.ISBN,
                                 Publisher = bookData.Publisher,

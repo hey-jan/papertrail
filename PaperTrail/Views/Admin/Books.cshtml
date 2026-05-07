@@ -39,7 +39,7 @@
                         </td>
                         <td>
                             <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1">
-                                @item.Category?.Name
+                                @string.Join(", ", item.Categories?.Select(c => c.Name) ?? Array.Empty<string>())
                             </span>
                         </td>
                         <td>@item.Price.ToPeso()</td>

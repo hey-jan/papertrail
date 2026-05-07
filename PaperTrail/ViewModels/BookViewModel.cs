@@ -30,9 +30,8 @@ namespace PaperTrail.ViewModels
 
         public string? ImageUrl { get; set; }
 
-        [Required]
-        [Display(Name = "Category")]
-        public int CategoryId { get; set; }
+        [Display(Name = "Categories")]
+        public List<int> CategoryIds { get; set; } = new List<int>();
 
         public List<SelectListItem>? Categories { get; set; }
     }

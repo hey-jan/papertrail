@@ -49,9 +49,9 @@ namespace PaperTrail.Models
         [Range(0, 5)]
         public double Rating { get; set; } = 0;
 
-        [Required]
-        public int CategoryId { get; set; }
-        public virtual Category? Category { get; set; }
+        public bool IsBestseller { get; set; } = false;
+
+        public virtual ICollection<Category>? Categories { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

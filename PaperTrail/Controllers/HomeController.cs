@@ -20,7 +20,7 @@ namespace PaperTrail.Controllers
         public async Task<IActionResult> Index()
         {
             var featuredBooks = await _context.Books
-                .Include(b => b.Category)
+                .Include(b => b.Categories)
                 .OrderByDescending(b => b.CreatedAt)
                 .Take(4)
                 .ToListAsync();
@@ -32,7 +32,7 @@ namespace PaperTrail.Controllers
 
         public async Task<IActionResult> Books(string? category, string? search, string? sort, decimal? minPrice, decimal? maxPrice)
         {
-            var query = _context.Books.Include(b => b.Category).AsQueryable();
+            var query = _context.Books.Include(b => b.Categories).AsQueryable();
 
             // Search
             if (!string.IsNullOrEmpty(search))
@@ -43,7 +43,7 @@ namespace PaperTrail.Controllers
             // Filter by Category
             if (!string.IsNullOrEmpty(category))
             {
-                query = query.Where(b => b.Category!.Name == category);
+                query = query.Where(b => b.Categories!.Any(c => c.Name == category));
             }
 
             // Filter by Price
@@ -70,13 +70,15 @@ namespace PaperTrail.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var book = await _context.Books
-                .Include(b => b.Category)
+                .Include(b => b.Categories)
                 .FirstOrDefaultAsync(b => b.Id == id);
 
             if (book == null) return NotFound();
 
+            var categoryIds = book.Categories?.Select(c => c.Id).ToList() ?? new List<int>();
+
             var relatedBooks = await _context.Books
-                .Where(b => b.CategoryId == book.CategoryId && b.Id != book.Id)
+                .Where(b => b.Id != book.Id && b.Categories != null && b.Categories.Any(c => categoryIds.Contains(c.Id)))
                 .Take(4)
                 .ToListAsync();
 

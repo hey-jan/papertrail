@@ -137,7 +137,7 @@ namespace PaperTrail.Controllers
         #region Book Management
         public async Task<IActionResult> Books()
         {
-            var books = await _context.Books.Include(b => b.Category).ToListAsync();
+            var books = await _context.Books.Include(b => b.Categories).ToListAsync();
             return View(books);
         }
 
@@ -170,8 +170,8 @@ namespace PaperTrail.Controllers
                     Description = model.Description,
                     Price = model.Price,
                     Stock = model.Stock,
-                    CategoryId = model.CategoryId,
-                    ImageUrl = imageUrl
+                    ImageUrl = imageUrl,
+                    Categories = await _context.Categories.Where(c => model.CategoryIds.Contains(c.Id)).ToListAsync()
                 };
 
                 _context.Books.Add(book);
@@ -186,7 +186,7 @@ namespace PaperTrail.Controllers
         [HttpGet]
         public async Task<IActionResult> EditBook(int id)
         {
-            var book = await _context.Books.FindAsync(id);
+            var book = await _context.Books.Include(b => b.Categories).FirstOrDefaultAsync(b => b.Id == id);
             if (book == null) return NotFound();
 
             var model = new BookViewModel
@@ -197,7 +197,7 @@ namespace PaperTrail.Controllers
                 Description = book.Description,
                 Price = book.Price,
                 Stock = book.Stock,
-                CategoryId = book.CategoryId,
+                CategoryIds = book.Categories?.Select(c => c.Id).ToList() ?? new List<int>(),
                 ImageUrl = book.ImageUrl,
                 Categories = await GetCategorySelectList()
             };
@@ -211,7 +211,7 @@ namespace PaperTrail.Controllers
         {
             if (ModelState.IsValid)
             {
-                var book = await _context.Books.FindAsync(model.Id);
+                var book = await _context.Books.Include(b => b.Categories).FirstOrDefaultAsync(b => b.Id == model.Id);
                 if (book == null) return NotFound();
 
                 book.Title = model.Title;
@@ -219,7 +219,14 @@ namespace PaperTrail.Controllers
                 book.Description = model.Description;
                 book.Price = model.Price;
                 book.Stock = model.Stock;
-                book.CategoryId = model.CategoryId;
+
+                var selectedCategories = await _context.Categories.Where(c => model.CategoryIds.Contains(c.Id)).ToListAsync();
+                if (book.Categories == null) book.Categories = new List<Category>();
+                book.Categories.Clear();
+                foreach (var cat in selectedCategories)
+                {
+                    book.Categories.Add(cat);
+                }
 
                 if (model.ImageFile != null)
                 {

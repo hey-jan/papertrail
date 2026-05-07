@@ -21,7 +21,11 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none">Home</a></li>
                     <li class="breadcrumb-item"><a asp-action="Books" class="text-decoration-none">Books</a></li>
-                    <li class="breadcrumb-item"><a asp-action="Books" asp-route-category="@Model.Category?.Name" class="text-decoration-none">@Model.Category?.Name</a></li>
+                    @if (Model.Categories != null && Model.Categories.Any())
+                    {
+                        var firstCategory = Model.Categories.First();
+                        <li class="breadcrumb-item"><a asp-action="Books" asp-route-category="@firstCategory.Name" class="text-decoration-none">@firstCategory.Name</a></li>
+                    }
                     <li class="breadcrumb-item active" aria-current="page">@Model.Title</li>
                 </ol>
             </nav>
