@@ -44,7 +44,8 @@ namespace PaperTrail.Controllers
                 { 
                     UserName = model.Email, 
                     Email = model.Email, 
-                    FullName = model.FullName 
+                    FirstName = model.FirstName,
+                    LastName = model.LastName 
                 };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
@@ -126,7 +127,8 @@ namespace PaperTrail.Controllers
 
             var model = new ProfileViewModel
             {
-                FullName = user.FullName ?? "",
+                FirstName = user.FirstName ?? "",
+                LastName = user.LastName ?? "",
                 Email = user.Email,
                 ProfilePictureUrl = user.ProfilePicture
             };
@@ -144,7 +146,8 @@ namespace PaperTrail.Controllers
 
             if (ModelState.IsValid)
             {
-                user.FullName = model.FullName;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
 
                 if (model.ProfilePictureFile != null)
                 {

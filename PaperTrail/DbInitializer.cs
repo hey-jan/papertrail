@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using PaperTrail.Data;
 using PaperTrail.Models;
 using System.Text.Json;
@@ -9,7 +10,7 @@ namespace PaperTrail
     {
         public static async Task Seed(ApplicationDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            context.Database.EnsureCreated();
+            context.Database.Migrate();
 
             // Seed Roles
             string[] roleNames = { "Admin", "Customer" };
@@ -29,7 +30,8 @@ namespace PaperTrail
                 {
                     UserName = adminEmail,
                     Email = adminEmail,
-                    FullName = "System Admin",
+                    FirstName = "System",
+                    LastName = "Admin",
                     EmailConfirmed = true
                 };
 

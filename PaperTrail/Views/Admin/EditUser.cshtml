@@ -16,10 +16,17 @@
                 <form asp-action="EditUser" method="post">
                     <input type="hidden" asp-for="Id" />
                     
-                    <div class="mb-3">
-                        <label asp-for="FullName" class="form-label fw-bold"></label>
-                        <input asp-for="FullName" class="form-control" placeholder="Enter full name" />
-                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FirstName" class="form-label fw-bold"></label>
+                            <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LastName" class="form-label fw-bold"></label>
+                            <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
                     </div>
 
                     <div class="mb-3">

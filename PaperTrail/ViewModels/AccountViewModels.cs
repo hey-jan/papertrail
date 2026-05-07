@@ -5,8 +5,12 @@ namespace PaperTrail.ViewModels
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "Full Name")]
-        public string FullName { get; set; } = string.Empty;
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; } = string.Empty;
 
         [Required]
         [EmailAddress]
@@ -42,8 +46,12 @@ namespace PaperTrail.ViewModels
     public class ProfileViewModel
     {
         [Required]
-        [Display(Name = "Full Name")]
-        public string FullName { get; set; } = string.Empty;
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; } = string.Empty;
 
         public string? Email { get; set; }
 
@@ -81,8 +89,12 @@ namespace PaperTrail.ViewModels
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        [Display(Name = "Full Name")]
-        public string FullName { get; set; } = string.Empty;
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; } = string.Empty;
 
         public List<string> SelectedRoles { get; set; } = new List<string>();
         public List<string> AllRoles { get; set; } = new List<string>();

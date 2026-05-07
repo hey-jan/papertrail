@@ -14,64 +14,71 @@
 
     <div class="row">
         <div class="col-lg-4">
-            <div class="card border-0 shadow-sm text-center p-4 mb-4">
+            <div class="card border-0 shadow-sm text-center p-4 mb-4" style="background-color: #fcfbf9;">
                 <div class="mb-3 position-relative d-inline-block mx-auto">
                     @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
                     {
-                        <img src="@Model.ProfilePictureUrl" id="profilePreview" class="rounded-circle border" style="width: 150px; height: 150px; object-fit: cover;">
+                        <img src="@Model.ProfilePictureUrl" id="profilePreview" class="rounded-circle border border-brown" style="width: 150px; height: 150px; object-fit: cover;">
                     }
                     else
                     {
-                        <div id="profilePreviewPlaceholder" class="rounded-circle bg-light d-flex align-items-center justify-content-center border" style="width: 150px; height: 150px;">
-                            <i class="bi bi-person fs-1 text-muted"></i>
+                        <div id="profilePreviewPlaceholder" class="rounded-circle bg-white d-flex align-items-center justify-content-center border border-brown" style="width: 150px; height: 150px;">
+                            <i class="bi bi-person fs-1" style="color: #8b5a2b;"></i>
                         </div>
-                        <img id="profilePreview" class="rounded-circle border d-none" style="width: 150px; height: 150px; object-fit: cover;">
+                        <img id="profilePreview" class="rounded-circle border border-brown d-none" style="width: 150px; height: 150px; object-fit: cover;">
                     }
                 </div>
-                <h4 class="fw-bold">@Model.FullName</h4>
-                <p class="text-muted">@Model.Email</p>
-                <hr>
-                <div class="nav flex-column nav-pills text-start" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <button class="nav-link active mb-2" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab">Personal Details</button>
-                    <button class="nav-link mb-2" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab">Order History</button>
-                    <a class="nav-link" asp-action="ChangePassword">Change Password</a>
+                <h4 class="fw-bold" style="color: #4a3b32;">@Model.FirstName @Model.LastName</h4>
+                <p style="color: #6d5b4f;">@Model.Email</p>
+                <hr style="border-color: #d1c0b3;">
+                <div class="nav flex-column nav-pills text-center profile-nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <button class="nav-link active mb-2" id="v-pills-profile-tab" data-bs-toggle="pill" data-bs-target="#v-pills-profile" type="button" role="tab" style="color: #5a4a40; background-color: transparent;">Personal Details</button>
+                    <button class="nav-link mb-2" id="v-pills-orders-tab" data-bs-toggle="pill" data-bs-target="#v-pills-orders" type="button" role="tab" style="color: #5a4a40;">Order History</button>
+                    <a class="nav-link" asp-action="ChangePassword" style="color: #5a4a40;">Change Password</a>
                 </div>
             </div>
         </div>
         <div class="col-lg-8">
             <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel">
-                    <div class="card border-0 shadow-sm p-4">
-                        <h5 class="mb-4 fw-bold">Edit Personal Details</h5>
+                    <div class="card border-0 shadow-sm p-4" style="background-color: #fcfbf9;">
+                        <h5 class="mb-4 fw-bold" style="color: #4a3b32;">Edit Personal Details</h5>
                         <form asp-action="Profile" method="post" enctype="multipart/form-data">
                             <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
                             
-                            <div class="mb-3">
-                                <label asp-for="FullName" class="form-label"></label>
-                                <input asp-for="FullName" class="form-control" />
-                                <span asp-validation-for="FullName" class="text-danger"></span>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="FirstName" class="form-label" style="color: #5a4a40;"></label>
+                                    <input asp-for="FirstName" class="form-control border-secondary text-dark" style="background-color: #fff;" />
+                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="LastName" class="form-label" style="color: #5a4a40;"></label>
+                                    <input asp-for="LastName" class="form-control border-secondary text-dark" style="background-color: #fff;"/>
+                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label class="form-label">Email Address (Read-only)</label>
-                                <input asp-for="Email" class="form-control" readonly />
+                                <label class="form-label" style="color: #5a4a40;">Email Address (Read-only)</label>
+                                <input asp-for="Email" class="form-control border-secondary text-muted" readonly />
                             </div>
 
                             <div class="mb-4">
-                                <label asp-for="ProfilePictureFile" class="form-label">Change Profile Picture</label>
-                                <input asp-for="ProfilePictureFile" class="form-control" type="file" accept="image/*" onchange="previewImage(this)" />
+                                <label asp-for="ProfilePictureFile" class="form-label" style="color: #5a4a40;">Change Profile Picture</label>
+                                <input asp-for="ProfilePictureFile" class="form-control border-secondary" type="file" accept="image/*" onchange="previewImage(this)" />
                                 <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
                             </div>
 
-                            <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                            <button type="submit" class="btn px-4 text-white" style="background-color: #8b5a2b; border-color: #8b5a2b;">Save Changes</button>
                         </form>
                     </div>
                 </div>
                 <div class="tab-pane fade" id="v-pills-orders" role="tabpanel">
-                    <div class="card border-0 shadow-sm p-4">
+                    <div class="card border-0 shadow-sm p-4" style="background-color: #fcfbf9;">
                         <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="mb-0 fw-bold">Order History</h5>
-                            <a asp-action="Orders" class="btn btn-sm btn-outline-primary">Open Full Page</a>
+                            <h5 class="mb-0 fw-bold" style="color: #4a3b32;">Order History</h5>
+                            <a asp-controller="Account" asp-action="Orders" class="btn btn-sm" style="color: #8b5a2b; border-color: #8b5a2b;">Open Full Page</a>
                         </div>
                         @{
                             var orders = ViewBag.Orders as IEnumerable<PaperTrail.Models.Order>;
@@ -81,18 +88,18 @@
                                     <table class="table table-hover align-middle">
                                         <thead>
                                             <tr>
-                                                <th>Order #</th>
-                                                <th>Date</th>
-                                                <th>Total</th>
+                                                <th style="color: #5a4a40; border-bottom-color: #d1c0b3;">Order #</th>
+                                                <th style="color: #5a4a40; border-bottom-color: #d1c0b3;">Date</th>
+                                                <th style="color: #5a4a40; border-bottom-color: #d1c0b3;">Total</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var order in orders)
                                             {
                                                 <tr>
-                                                    <td>@order.OrderNumber</td>
-                                                    <td>@order.OrderDate.ToShortDateString()</td>
-                                                    <td class="fw-bold">@order.TotalAmount.ToPeso()</td>
+                                                    <td style="border-bottom-color: #e6dfd7;">@order.OrderNumber</td>
+                                                    <td style="border-bottom-color: #e6dfd7;">@order.OrderDate.ToShortDateString()</td>
+                                                    <td class="fw-bold" style="color: #8b5a2b; border-bottom-color: #e6dfd7;">@order.TotalAmount.ToPeso()</td>
                                                 </tr>
                                             }
                                         </tbody>
@@ -102,9 +109,9 @@
                             else
                             {
                                 <div class="text-center py-5">
-                                    <i class="bi bi-bag-x fs-1 text-muted d-block mb-3"></i>
-                                    <p class="text-muted">You haven't placed any orders yet.</p>
-                                    <a href="/" class="btn btn-outline-primary px-4">Start Shopping</a>
+                                    <i class="bi bi-bag-x fs-1 d-block mb-3" style="color: #a89485;"></i>
+                                    <p style="color: #6d5b4f;">You haven't placed any orders yet.</p>
+                                    <a href="/" class="btn px-4 mt-2" style="color: #8b5a2b; border-color: #8b5a2b;">Start Shopping</a>
                                 </div>
                             }
                         }
@@ -122,15 +129,29 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    var preview = document.getElementById('profilePreview');
+                    var img = document.getElementById('profilePreview');
                     var placeholder = document.getElementById('profilePreviewPlaceholder');
                     
-                    preview.src = e.target.result;
-                    preview.classList.remove('d-none');
-                    if (placeholder) placeholder.classList.add('d-none');
+                    img.src = e.target.result;
+                    img.classList.remove('d-none');
+                    if (placeholder) {
+                        placeholder.classList.add('d-none');
+                    }
                 }
                 reader.readAsDataURL(input.files[0]);
             }
         }
+        
+        // Add custom styles for the nav pills to match the theme
+        document.addEventListener('DOMContentLoaded', function() {
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .profile-nav .nav-link { color: #5a4a40 !important; }
+                .profile-nav .nav-link:hover { background-color: #f2ebe1; }
+                .profile-nav .nav-link.active { background-color: #8b5a2b !important; color: white !important; }
+                .btn[style*="border-color: #8b5a2b"]:hover { background-color: #8b5a2b; color: white !important; }
+            `;
+            document.head.appendChild(style);
+        });
     </script>
 }

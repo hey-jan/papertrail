@@ -69,7 +69,8 @@ namespace PaperTrail.Controllers
             {
                 Id = user.Id,
                 Email = user.Email!,
-                FullName = user.FullName ?? "",
+                FirstName = user.FirstName ?? "",
+                LastName = user.LastName ?? "",
                 SelectedRoles = userRoles.ToList(),
                 AllRoles = roles
             };
@@ -86,7 +87,8 @@ namespace PaperTrail.Controllers
                 var user = await _userManager.FindByIdAsync(model.Id);
                 if (user == null) return NotFound();
 
-                user.FullName = model.FullName;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
                 user.Email = model.Email;
                 user.UserName = model.Email;
 

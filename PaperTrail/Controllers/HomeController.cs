@@ -24,9 +24,14 @@ namespace PaperTrail.Controllers
                 .OrderByDescending(b => b.CreatedAt)
                 .Take(4)
                 .ToListAsync();
-            
+
             ViewBag.Categories = await _context.Categories.Take(4).ToListAsync();
-            
+
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return View("CustomerDashboard", featuredBooks);
+            }
+
             return View(featuredBooks);
         }
 
@@ -78,7 +83,7 @@ namespace PaperTrail.Controllers
             var categoryIds = book.Categories?.Select(c => c.Id).ToList() ?? new List<int>();
 
             var relatedBooks = await _context.Books
-                .Where(b => b.Id != book.Id && b.Categories != null && b.Categories.Any(c => categoryIds.Contains(c.Id)))
+                .Where(b => b.Id != book.Id && b.Categories!.Any(c => categoryIds.Contains(c.Id)))
                 .Take(4)
                 .ToListAsync();
 
