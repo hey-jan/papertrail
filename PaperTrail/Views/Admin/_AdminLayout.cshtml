@@ -78,10 +78,17 @@
                             <i class="bi bi-cart-check"></i> Transactions
                         </a>
                     </li>
-                    <li class="nav-item mt-5">
+                    <li class="nav-item">
                         <a class="nav-link" asp-controller="Home" asp-action="Index">
                             <i class="bi bi-arrow-left"></i> Back to Store
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <form class="form-inline" asp-controller="Account" asp-action="Logout" method="post">
+                            <button type="submit" class="nav-link bg-transparent border-0 w-100 text-start">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
                     </li>
                 </ul>
             </nav>

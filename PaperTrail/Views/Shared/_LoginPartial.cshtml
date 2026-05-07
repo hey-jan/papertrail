@@ -24,6 +24,11 @@
             <span>@displayName</span>
         </a>
         <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarDropdown">
+            @if (User.IsInRole("Admin"))
+            {
+                <li><a class="dropdown-item fw-bold text-primary" asp-controller="Admin" asp-action="Index"><i class="bi bi-shield-lock me-2"></i>Admin Dashboard</a></li>
+                <li><hr class="dropdown-divider"></li>
+            }
             <li><a class="dropdown-item" asp-controller="Account" asp-action="Profile">Profile</a></li>
             <li><a class="dropdown-item" asp-controller="Account" asp-action="Orders">My Orders</a></li>
             <li><hr class="dropdown-divider"></li>

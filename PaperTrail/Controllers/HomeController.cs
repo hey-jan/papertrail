@@ -29,6 +29,12 @@ namespace PaperTrail.Controllers
 
             if (User.Identity != null && User.Identity.IsAuthenticated)
             {
+                if (User.IsInRole("Admin"))
+                {
+                    // For Admins, we might still want to show them the customer view by default 
+                    // or redirect them. Let's redirect to Admin Index to keep them distinct.
+                    return RedirectToAction("Index", "Admin");
+                }
                 return View("CustomerDashboard", featuredBooks);
             }
 

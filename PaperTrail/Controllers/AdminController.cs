@@ -31,14 +31,46 @@ namespace PaperTrail.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.UserCount = await _context.Users.CountAsync();
+            var allUsers = await _userManager.Users.ToListAsync();
+            var customerCount = 0;
+            foreach (var user in allUsers)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                // Count as customer if they have the "Customer" role OR no role at all
+                if (roles.Contains("Customer") || !roles.Any())
+                {
+                    customerCount++;
+                }
+            }
+            ViewBag.CustomerCount = customerCount;
             ViewBag.BookCount = await _context.Books.CountAsync();
             ViewBag.OrderCount = await _context.Orders.CountAsync();
             
-            var successfulStatuses = new[] { OrderStatus.Paid, OrderStatus.Shipped, OrderStatus.Completed };
+            var successfulStatuses = new[] { OrderStatus.Confirmed, OrderStatus.Paid, OrderStatus.Shipped, OrderStatus.Completed };
             ViewBag.TotalSales = await _context.Orders
                 .Where(o => successfulStatuses.Contains(o.Status))
                 .SumAsync(o => (decimal?)o.TotalAmount) ?? 0;
+
+            ViewBag.RecentOrders = await _context.Orders
+                .Include(o => o.User)
+                .OrderByDescending(o => o.OrderDate)
+                .Take(5)
+                .ToListAsync();
+
+            // Sales Analytics Data (Last 7 Days)
+            var last7Days = Enumerable.Range(0, 7)
+                .Select(i => DateTime.Today.AddDays(-i))
+                .Reverse()
+                .ToList();
+
+            var salesData = await _context.Orders
+                .Where(o => successfulStatuses.Contains(o.Status) && o.OrderDate >= last7Days.First())
+                .GroupBy(o => o.OrderDate.Date)
+                .Select(g => new { Date = g.Key, Total = g.Sum(o => o.TotalAmount) })
+                .ToListAsync();
+
+            ViewBag.ChartLabels = last7Days.Select(d => d.ToString("MMM dd")).ToList();
+            ViewBag.ChartData = last7Days.Select(d => salesData.FirstOrDefault(s => s.Date == d.Date)?.Total ?? 0).ToList();
 
             return View();
         }
